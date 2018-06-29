@@ -45,13 +45,13 @@ describe Puppet::Type.type(:mcx).provider(:mcxcontent) do
 
   describe 'when managing the resource' do
     it 'executes external command dscl from :create' do
-      provider.stubs(:has_mcx?).returns(false)
+      provider.stubs(:mcx?).returns(false)
       provider.class.expects(:dscl).returns('').once
       provider.create
     end
 
     it 'deletes existing mcx prior to import from :create' do
-      provider.stubs(:has_mcx?).returns(true)
+      provider.stubs(:mcx?).returns(true)
       provider.class.expects(:dscl).with('localhost', '-mcxdelete', ds_path, anything).once
       provider.class.expects(:dscl).with('localhost', '-mcximport', ds_path, anything).once
       provider.create
@@ -73,13 +73,13 @@ describe Puppet::Type.type(:mcx).provider(:mcxcontent) do
     end
 
     it 'executes external command dscl from :content=' do
-      provider.stubs(:has_mcx?).returns(false)
+      provider.stubs(:mcx?).returns(false)
       provider.class.expects(:dscl).returns('').once
       provider.content = ''
     end
 
     it 'deletes existing mcx prior to import from :content=' do
-      provider.stubs(:has_mcx?).returns(true)
+      provider.stubs(:mcx?).returns(true)
       provider.class.expects(:dscl).with('localhost', '-mcxdelete', ds_path, anything).once
       provider.class.expects(:dscl).with('localhost', '-mcximport', ds_path, anything).once
       provider.content = ''

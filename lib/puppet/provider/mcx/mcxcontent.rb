@@ -69,36 +69,36 @@ Puppet::Type.type(:mcx).provide :mcxcontent, parent: Puppet::Provider do
   end
 
   def destroy
-    ds_parms = get_dsparams
-    ds_t = TypeMap[ds_parms[:ds_type]]
-    ds_n = ds_parms[:ds_name].to_s
+    params = dsparams
+    ds_t = TypeMap[params[:ds_type]]
+    ds_n = params[:ds_name].to_s
     ds_path = "/Local/Default/#{ds_t}/#{ds_n}"
 
     dscl 'localhost', '-mcxdelete', ds_path
   end
 
   def exists?
-    has_mcx?
+    mcx?
   rescue Puppet::ExecutionFailure
     return false
   end
 
   def content
-    ds_parms = get_dsparams
+    params = dsparams
 
-    self.class.mcxexport(ds_parms[:ds_type], ds_parms[:ds_name])
+    self.class.mcxexport(params[:ds_type], params[:ds_name])
   end
 
   def content=(_value)
     # dscl localhost -mcximport
-    ds_parms = get_dsparams
+    params = dsparams
 
-    mcximport(ds_parms[:ds_type], ds_parms[:ds_name], resource[:content])
+    mcximport(params[:ds_type], params[:ds_name], resource[:content])
   end
 
   private
 
-  def has_mcx?
+  def mcx?
     !content.empty?
   end
 
@@ -106,7 +106,7 @@ Puppet::Type.type(:mcx).provide :mcxcontent, parent: Puppet::Provider do
     ds_t = TypeMap[ds_type]
     ds_path = "/Local/Default/#{ds_t}/#{ds_name}"
 
-    if has_mcx?
+    if mcx?
       Puppet.debug "Removing MCX from #{ds_path}"
       dscl 'localhost', '-mcxdelete', ds_path
     end
@@ -151,7 +151,7 @@ Puppet::Type.type(:mcx).provide :mcxcontent, parent: Puppet::Provider do
   end
 
   # Gather ds_type and ds_name from resource or parse it out of the name.
-  def get_dsparams
+  def dsparams
     ds_type = resource[:ds_type]
     ds_type ||= parse_type(resource[:name])
     raise MCXContentProviderException unless TypeMap.keys.include? ds_type.to_sym
