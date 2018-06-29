@@ -1,5 +1,4 @@
 Puppet::Type.newtype(:macauthorization) do
-
   @doc = "Manage the Mac OS X authorization database. See the
     [Apple developer site](https://developer.apple.com/library/content/documentation/Security/Conceptual/Security_Overview/AuthenticationAndAuthorization/AuthenticationAndAuthorization.html)
     for more information.
@@ -14,24 +13,24 @@ Puppet::Type.newtype(:macauthorization) do
   ensurable
 
   autorequire(:file) do
-    ["/etc/authorization"]
+    ['/etc/authorization']
   end
 
   def munge_boolean(value)
     case value
-    when true, "true", :true
+    when true, 'true', :true
       :true
-    when false, "false", :false
+    when false, 'false', :false
       :false
     else
-      fail("munge_boolean only takes booleans")
+      raise('munge_boolean only takes booleans')
     end
   end
 
   def munge_integer(value)
-      Integer(value)
+    Integer(value)
   rescue ArgumentError
-      fail _("munge_integer only takes integers")
+    raise _('munge_integer only takes integers')
   end
 
   newparam(:name) do
@@ -54,7 +53,7 @@ Puppet::Type.newtype(:macauthorization) do
     # newvalue(:comment)  # not yet implemented.
   end
 
-  newproperty(:allow_root, :boolean => true) do
+  newproperty(:allow_root, boolean: true) do
     desc "Corresponds to `allow-root` in the authorization store. Specifies
     whether a right should be allowed automatically if the requesting process
     is running with `uid == 0`.  AuthorizationServices defaults this attribute
@@ -68,8 +67,8 @@ Puppet::Type.newtype(:macauthorization) do
     end
   end
 
-  newproperty(:authenticate_user, :boolean => true) do
-    desc "Corresponds to `authenticate-user` in the authorization store."
+  newproperty(:authenticate_user, boolean: true) do
+    desc 'Corresponds to `authenticate-user` in the authorization store.'
 
     newvalue(:true)
     newvalue(:false)
@@ -91,7 +90,7 @@ Puppet::Type.newtype(:macauthorization) do
   end
 
   newproperty(:comment) do
-    desc "The `comment` attribute for authorization resources."
+    desc 'The `comment` attribute for authorization resources.'
   end
 
   newproperty(:group) do
@@ -111,15 +110,15 @@ Puppet::Type.newtype(:macauthorization) do
     end
   end
 
-  newproperty(:mechanisms, :array_matching => :all) do
-    desc "An array of suitable mechanisms."
+  newproperty(:mechanisms, array_matching: :all) do
+    desc 'An array of suitable mechanisms.'
   end
 
-  newproperty(:rule, :array_matching => :all) do
-    desc "The rule(s) that this right refers to."
+  newproperty(:rule, array_matching: :all) do
+    desc 'The rule(s) that this right refers to.'
   end
 
-  newproperty(:session_owner, :boolean => true) do
+  newproperty(:session_owner, boolean: true) do
     desc "Whether the session owner automatically matches this rule or right.
     Corresponds to `session-owner` in the authorization store."
 
@@ -131,7 +130,7 @@ Puppet::Type.newtype(:macauthorization) do
     end
   end
 
-  newproperty(:shared, :boolean => true) do
+  newproperty(:shared, boolean: true) do
     desc "Whether the Security Server should mark the credentials used to gain
     this right as shared. The Security Server may use any shared credentials
     to authorize this right. For maximum security, set sharing to false so
@@ -158,10 +157,9 @@ Puppet::Type.newtype(:macauthorization) do
   end
 
   newproperty(:tries) do
-    desc "The number of tries allowed."
+    desc 'The number of tries allowed.'
     munge do |value|
       @resource.munge_integer(value)
     end
   end
-
 end

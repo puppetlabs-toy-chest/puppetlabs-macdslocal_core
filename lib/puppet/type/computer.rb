@@ -1,5 +1,4 @@
 Puppet::Type.newtype(:computer) do
-
   @doc = "Computer object management using DirectoryService
     on OS X.
 
@@ -33,7 +32,7 @@ Puppet::Type.newtype(:computer) do
     end
   end
 
-  newproperty(:ensure, :parent => Puppet::Property::Ensure) do
+  newproperty(:ensure, parent: Puppet::Property::Ensure) do
     desc "Control the existences of this computer record. Set this attribute to
       `present` to ensure the computer record exists.  Set it to `absent`
       to delete any computer records with this name"
@@ -56,11 +55,10 @@ Puppet::Type.newtype(:computer) do
   end
 
   newproperty(:en_address) do
-    desc "The MAC address of the primary network interface. Must match en0."
+    desc 'The MAC address of the primary network interface. Must match en0.'
   end
 
   newproperty(:ip_address) do
-    desc "The IP Address of the Computer object."
+    desc 'The IP Address of the Computer object.'
   end
-
 end

@@ -1,5 +1,4 @@
 Puppet::Type.newtype(:mcx) do
-
   @doc = "MCX object management using DirectoryService on OS X.
 
 The default provider of this type merely manages the XML plist as
@@ -15,11 +14,11 @@ to other machines.
 MCX settings refer to, the MCX resource will autorequire that user, group, or computer.
 "
   feature :manages_content, \
-    "The provider can manage MCXSettings as a string.",
-    :methods => [:content, :content=]
+          'The provider can manage MCXSettings as a string.',
+          methods: [:content, :content=]
 
   ensurable do
-    desc "Create or remove the MCX setting."
+    desc 'Create or remove the MCX setting.'
 
     newvalue(:present) do
       provider.create
@@ -28,7 +27,6 @@ MCX settings refer to, the MCX resource will autorequire that user, group, or co
     newvalue(:absent) do
       provider.destroy
     end
-
   end
 
   newparam(:name) do
@@ -45,11 +43,9 @@ MCX settings refer to, the MCX resource will autorequire that user, group, or co
   end
 
   newparam(:ds_type) do
-
-    desc "The DirectoryService type this MCX setting attaches to."
+    desc 'The DirectoryService type this MCX setting attaches to.'
 
     newvalues(:user, :group, :computer, :computerlist)
-
   end
 
   newparam(:ds_name) do
@@ -59,7 +55,7 @@ MCX settings refer to, the MCX resource will autorequire that user, group, or co
     example, in `/Groups/admin`, `group` will be used as the dstype.)"
   end
 
-  newproperty(:content, :required_features => :manages_content) do
+  newproperty(:content, required_features: :manages_content) do
     desc "The XML Plist used as the value of MCXSettings in DirectoryService.
     This is the standard output from the system command:
 
@@ -75,11 +71,11 @@ MCX settings refer to, the MCX resource will autorequire that user, group, or co
     # value returns a Symbol
     ds_type = value(:ds_type)
     ds_name = value(:ds_name)
-    if ds_type == type
-      rval = [ ds_name.to_s ]
-    else
-      rval = [ ]
-    end
+    rval = if ds_type == type
+             [ds_name.to_s]
+           else
+             []
+           end
     rval
   end
 
@@ -94,5 +90,4 @@ MCX settings refer to, the MCX resource will autorequire that user, group, or co
   autorequire(:computer) do
     setup_autorequire(:computer)
   end
-
 end

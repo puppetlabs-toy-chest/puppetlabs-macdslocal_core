@@ -1,7 +1,6 @@
 require 'tempfile'
 
-Puppet::Type.type(:mcx).provide :mcxcontent, :parent => Puppet::Provider do
-
+Puppet::Type.type(:mcx).provide :mcxcontent, parent: Puppet::Provider do
   desc "MCX Settings management using DirectoryService on OS X.
 
   This provider manages the entire MCXSettings attribute available
@@ -20,19 +19,18 @@ Puppet::Type.type(:mcx).provide :mcxcontent, :parent => Puppet::Provider do
   # This provides a mapping of puppet types to DirectoryService
   # type strings.
   TypeMap = {
-    :user => "Users",
-    :group => "Groups",
-    :computer => "Computers",
-    :computerlist => "ComputerLists",
-  }
+    user: 'Users',
+    group: 'Groups',
+    computer: 'Computers',
+    computerlist: 'ComputerLists',
+  }.freeze
 
-  class MCXContentProviderException < Exception
-
+  class MCXContentProviderException < RuntimeError
   end
 
-  commands :dscl => "/usr/bin/dscl"
-  confine :operatingsystem => :darwin
-  defaultfor :operatingsystem => :darwin
+  commands dscl: '/usr/bin/dscl'
+  confine operatingsystem: :darwin
+  defaultfor operatingsystem: :darwin
 
   def self.instances
     mcx_list = []
@@ -47,11 +45,11 @@ Puppet::Type.type(:mcx).provide :mcxcontent, :parent => Puppet::Provider do
         else
           # This node has MCX data.
 
-          mcx_list << self.new(
-            :name => "/#{TypeMap[ds_type]}/#{ds_name}",
-            :ds_type => ds_type,
-            :ds_name => ds_name,
-            :content => content
+          mcx_list << new(
+            name: "/#{TypeMap[ds_type]}/#{ds_name}",
+            ds_type: ds_type,
+            ds_name: ds_name,
+            content: content,
           )
         end
       end
@@ -66,9 +64,8 @@ Puppet::Type.type(:mcx).provide :mcxcontent, :parent => Puppet::Provider do
     dscl 'localhost', '-mcxexport', ds_path
   end
 
-
   def create
-    self.content=(resource[:content])
+    self.content = resource[:content]
   end
 
   def destroy
@@ -81,11 +78,9 @@ Puppet::Type.type(:mcx).provide :mcxcontent, :parent => Puppet::Provider do
   end
 
   def exists?
-    begin
-      has_mcx?
-    rescue Puppet::ExecutionFailure
-      return false
-    end
+    has_mcx?
+  rescue Puppet::ExecutionFailure
+    return false
   end
 
   def content
@@ -94,7 +89,7 @@ Puppet::Type.type(:mcx).provide :mcxcontent, :parent => Puppet::Provider do
     self.class.mcxexport(ds_parms[:ds_type], ds_parms[:ds_name])
   end
 
-  def content=(value)
+  def content=(_value)
     # dscl localhost -mcximport
     ds_parms = get_dsparams
 
@@ -117,7 +112,7 @@ Puppet::Type.type(:mcx).provide :mcxcontent, :parent => Puppet::Provider do
     end
 
     # val being passed in is resource[:content] which should be UTF-8
-    tmp = Tempfile.new('puppet_mcx', :encoding => Encoding::UTF_8)
+    tmp = Tempfile.new('puppet_mcx', encoding: Encoding::UTF_8)
     begin
       tmp << val
       tmp.flush
@@ -134,13 +129,13 @@ Puppet::Type.type(:mcx).provide :mcxcontent, :parent => Puppet::Provider do
     ds_type = name.split('/')[1]
     unless ds_type
       raise MCXContentProviderException,
-      _("Could not parse ds_type from resource name '%{name}'.  Specify with ds_type parameter.") % { name: name }
+            _("Could not parse ds_type from resource name '%{name}'.  Specify with ds_type parameter.") % { name: name }
     end
     # De-pluralize and downcase.
     ds_type = ds_type.chop.downcase.to_sym
     unless TypeMap.key? ds_type
       raise MCXContentProviderException,
-      _("Could not parse ds_type from resource name '%{name}'.  Specify with ds_type parameter.") % { name: name }
+            _("Could not parse ds_type from resource name '%{name}'.  Specify with ds_type parameter.") % { name: name }
     end
     ds_type
   end
@@ -150,7 +145,7 @@ Puppet::Type.type(:mcx).provide :mcxcontent, :parent => Puppet::Provider do
     ds_name = name.split('/')[2]
     unless ds_name
       raise MCXContentProviderException,
-      _("Could not parse ds_name from resource name '%{name}'.  Specify with ds_name parameter.") % { name: name }
+            _("Could not parse ds_name from resource name '%{name}'.  Specify with ds_name parameter.") % { name: name }
     end
     ds_name
   end
@@ -165,9 +160,8 @@ Puppet::Type.type(:mcx).provide :mcxcontent, :parent => Puppet::Provider do
     ds_name ||= parse_name(resource[:name])
 
     {
-      :ds_type => ds_type.to_sym,
-      :ds_name => ds_name,
+      ds_type: ds_type.to_sym,
+      ds_name: ds_name,
     }
   end
-
 end
