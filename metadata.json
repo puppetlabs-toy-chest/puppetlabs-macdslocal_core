@@ -2,9 +2,11 @@
   "name": "puppetlabs-macdslocal_core",
   "version": "0.1.0",
   "author": "Puppet Labs",
-  "summary": "",
+  "summary": "Manage OS X Directory Service objects",
   "license": "Apache-2.0",
-  "source": "",
+  "source": " https://github.com/puppetlabs/puppetlabs-macdslocal_core",
+  "project_page": "https://github.com/puppetlabs/puppetlabs-macdslocal_core/blob/master/README.md",
+  "issues_url": "https://tickets.puppetlabs.com/projects/MODULES",
   "dependencies": [
 
   ],
