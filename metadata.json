@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-macdslocal_core",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "author": "Puppet Labs",
   "summary": "Manage OS X Directory Service objects",
   "license": "Apache-2.0",
