@@ -8,7 +8,7 @@
     * [Setup requirements](#setup-requirements)
 3. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 4. [Limitations - OS compatibility, etc.](#limitations)
-5. [Development - Guide for contributing to the module](#development)
+5. [Deprecation - The development status of this module](#deprecation)
 
 ## Description
 
@@ -39,10 +39,8 @@ This command will create a browsable `_index.html` file in the `doc` directory. 
 
 This module is only available on OS X platforms that have the CFPropertyList gem installed.
 
-## Development
+## Deprecation
 
-Puppet Labs modules on the Puppet Forge are open projects, and community contributions are essential for keeping them great. We can't access the huge number of platforms and myriad of hardware, software, and deployment configurations that Puppet is intended to serve.
+When the `macdslocal` code was removed from Puppet in Puppet Platform 6 and extracted to this module it was effectively deprecated and is no longer under active develepment.
 
-We want to keep it as easy as possible to contribute changes so that our modules work in your environment. There are a few guidelines that we need contributors to follow so that we can have a chance of keeping on top of things.
-
-For more information, see our [module contribution guide.](https://docs.puppetlabs.com/forge/contributing.html)
+This repository has been archived, so you can still fork it and use the code. If you need help or have questions about this module, please join our [Community Slack](https://slack.puppet.com/).
